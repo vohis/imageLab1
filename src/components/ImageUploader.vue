@@ -1,15 +1,16 @@
 <template>
-    <div>
-      <h1>Загрузка изображения</h1>
+    <div class="container">
       <input type="file" @change="onFileChange" accept="image/*" />
       <input type="text" v-model="imageUrl" placeholder="Введите URL изображения" @change="loadImageFromUrl" />
       
-      <canvas
+      <div class="canvas-wrapper">
+        <canvas
         ref="canvas"
-        @click="getColor"
-        @mousemove="updateHoverInfo"
-        style="border: 1px solid black; margin-top: 10px; width: 400px; height: auto;"
-      ></canvas>
+          @click="getColor"
+          @mousemove="updateHoverInfo"
+          style="border: 1px solid black; margin-top: 10px; width: 400px; height: auto;"
+        ></canvas>
+      </div>
   
       <div v-if="imageLoaded" class="info-panel">
         <p>Координаты: {{ mouseX }}, {{ mouseY }}</p>
@@ -57,7 +58,7 @@
       loadImage(src) {
         this.image = new Image();
         this.image.src = src;
-        this.image.crossOrigin = "Anonymous"; // Добавлено для поддержки изображений с других доменов
+        this.image.crossOrigin = "Anonymous";
         this.image.onload = () => {
           this.imageLoaded = true;
           this.imageWidth = this.image.width;
@@ -75,22 +76,29 @@
         canvas.height = this.image.height * this.canvasScale; // Установим высоту по масштабу
         ctx.drawImage(this.image, 0, 0, canvas.width, canvas.height);
       },
-      getColor(event) {
+      
+        getColor(event) {
         const canvas = this.$refs.canvas;
         const ctx = canvas.getContext("2d");
         const rect = canvas.getBoundingClientRect();
-        const x = Math.round((event.clientX - rect.left) / this.canvasScale); // Корректируем координаты
-        const y = Math.round((event.clientY - rect.top) / this.canvasScale); // Корректируем координаты
-  
-        // Извлекаем цвет пикселя
-        const pixelData = ctx.getImageData(x, y, 1, 1).data;
-        this.color = {
-          r: pixelData[0],
-          g: pixelData[1],
-          b: pixelData[2],
-          a: pixelData[3],
-        };
+
+        // Получаем точные координаты на холсте, учитывая масштаб
+        const x = Math.round((event.clientX - rect.left) * (canvas.width / rect.width));
+        const y = Math.round((event.clientY - rect.top) * (canvas.height / rect.height));
+
+        // Проверка на то, что координаты в пределах холста
+        if (x >= 0 && y >= 0 && x < canvas.width && y < canvas.height) {
+          const pixelData = ctx.getImageData(x, y, 1, 1).data;
+          this.color = {
+            r: pixelData[0],
+            g: pixelData[1],
+            b: pixelData[2],
+            a: pixelData[3],
+          };
+        }
       },
+
+
       updateHoverInfo(event) {
         const canvas = this.$refs.canvas;
         const rect = canvas.getBoundingClientRect();
@@ -112,5 +120,20 @@
     margin-left: 10px;
     border: 1px solid #000;
   }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+
+  .canvas-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
   </style>
   
