@@ -133,8 +133,8 @@ export default {
       isResizeModalVisible: false,
       newWidth: 0,
       newHeight: 0,
-      originalPixels: 0,  // Общее количество пикселей до изменения
-      newPixels: 0,       // Общее количество пикселей после изменения
+      originalPixels: 0,  
+      newPixels: 0,
       resizeUnit: 'pixels',
       interpolationAlgorithm: 'nearest-neighbor',
       maintainAspectRatio: true,
@@ -145,13 +145,13 @@ export default {
       panY: 0,
       startX: 0,
       startY: 0,
-      inputError: null,  // Ошибки валидации ввода
-      isEyedropperActive: false,  // Состояние для инструмента пипетки
-    color1: { r: 0, g: 0, b: 0, a: 0 },  // Первый выбранный цвет
-    color2: { r: 0, g: 0, b: 0, a: 0 },  // Второй выбранный цвет
+      inputError: null,  
+      isEyedropperActive: false,  
+    color1: { r: 0, g: 0, b: 0, a: 0 },  
+    color2: { r: 0, g: 0, b: 0, a: 0 },  
     isTooltipVisible: false,
     tooltipText: '',
-    contrastRatio: 0,  // Контраст
+    contrastRatio: 0,  
     };
   },
   methods: {
@@ -304,7 +304,7 @@ export default {
     toggleEyedropperTool() {
     this.isEyedropperActive = !this.isEyedropperActive;
     if (this.isEyedropperActive) {
-      this.color1 = { r: 0, g: 0, b: 0, a: 0 }; // Сброс цветов при активации
+      this.color1 = { r: 0, g: 0, b: 0, a: 0 }; 
       this.color2 = { r: 0, g: 0, b: 0, a: 0 };
     }
   },
@@ -315,9 +315,9 @@ export default {
     this.updateHoverInfo(event);
     if (this.isEyedropperActive) {
       if (event.altKey || event.ctrlKey || event.shiftKey) {
-        this.color2 = { ...this.color }; // Второй цвет
+        this.color2 = { ...this.color }; 
       } else {
-        this.color1 = { ...this.color }; // Первый цвет
+        this.color1 = { ...this.color }
       }
     }
   },
@@ -351,11 +351,11 @@ export default {
     this.updateHoverInfo(event);
     if (this.isEyedropperActive) {
       if (event.altKey || event.ctrlKey || event.shiftKey) {
-        this.color2 = { ...this.color }; // Второй цвет
-        this.updateContrast(); // Обновление контраста при выборе второго цвета
+        this.color2 = { ...this.color };
+        this.updateContrast(); 
       } else {
-        this.color1 = { ...this.color }; // Первый цвет
-        this.updateContrast(); // Обновление контраста при выборе первого цвета
+        this.color1 = { ...this.color }; 
+        this.updateContrast();
       }
     }
   },
@@ -388,7 +388,7 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
   border: 2px solid #ccc;
 }
@@ -476,7 +476,7 @@ export default {
   padding: 5px;
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* Позиционирование над элементом */
+  bottom: 125%;
   left: 50%;
   margin-left: -60px;
   opacity: 0;
